@@ -1,12 +1,31 @@
 
-%YAML 1.1
-%TAG !u! tag:unity3d.com,2011:
---- !u!1045 &1
-EditorBuildSettings:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Astravion.unity
-    guid: a1b2c3d4e5f6478899aabbccddeeff01
-  m_configObjects: {}
+using UnityEditor;
+using UnityEditor.Build;
+using UnityEditor.Build.Reporting;
+using UnityEngine;
+
+public class AstravionBuildValidation : IPreprocessBuildWithReport
+{
+    public int callbackOrder => -1000;
+
+    public void OnPreprocessBuild(BuildReport report)
+    {
+        const string scenePath = "Assets/Scenes/Astravion.unity";
+
+        SceneAsset scene = AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
+
+        if (scene == null)
+        {
+            throw new BuildFailedException(
+                "Scene ASTRAVION tidak ditemukan: " + scenePath
+            );
+        }
+
+        EditorBuildSettings.scenes = new[]
+        {
+            new EditorBuildSettingsScene(scenePath, true)
+        };
+
+        Debug.Log("ASTRAVION: Scene berhasil dimasukkan ke Build Settings.");
+    }
+}
