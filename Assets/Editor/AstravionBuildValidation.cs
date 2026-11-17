@@ -1,30 +1,12 @@
-using System.Linq;
-using UnityEditor;
-using UnityEditor.Build;
-using UnityEditor.Build.Reporting;
-using UnityEngine;
 
-public class AstravionBuildValidation : IPreprocessBuildWithReport
-{
-    private const string MainScene = "Assets/Scenes/Astravion.unity";
-    public int callbackOrder => -1000;
-
-    public void OnPreprocessBuild(BuildReport report)
-    {
-        if (AssetDatabase.LoadAssetAtPath<SceneAsset>(MainScene) == null)
-            throw new BuildFailedException("Scene ASTRAVION tidak ditemukan: " + MainScene);
-
-        var scenes = EditorBuildSettings.scenes;
-        if (scenes == null || !scenes.Any(s => s.enabled && s.path == MainScene))
-            throw new BuildFailedException("Scene ASTRAVION belum diaktifkan pada Build Settings: " + MainScene);
-    }
-
-    [MenuItem("ASTRAVION/Validate Android Build Scene")]
-    public static void ValidateScene()
-    {
-        bool exists = AssetDatabase.LoadAssetAtPath<SceneAsset>(MainScene) != null;
-        bool enabled = EditorBuildSettings.scenes != null &&
-                       EditorBuildSettings.scenes.Any(s => s.enabled && s.path == MainScene);
-        Debug.Log("ASTRAVION Scene exists: " + exists + " | enabled in Build Settings: " + enabled);
-    }
-}
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Astravion.unity
+    guid: a1b2c3d4e5f6478899aabbccddeeff01
+  m_configObjects: {}
